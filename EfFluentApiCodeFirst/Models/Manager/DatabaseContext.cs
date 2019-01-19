@@ -1,4 +1,5 @@
-﻿using EfFluentApiCodeFirst.Models.OneToOneOrZero;
+﻿using EfFluentApiCodeFirst.Models.OneToMany;
+using EfFluentApiCodeFirst.Models.OneToOneOrZero;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,6 +14,9 @@ namespace EfFluentApiCodeFirst.Models.Manager
         public DbSet<Student> Student { get; set; }
         public DbSet<StudentAddress> StudentAddress { get; set; }
 
+        //One-to-many
+        public DbSet<Teacher> Teacher { get; set; }
+        public DbSet<Lessons> Lessons { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -21,7 +25,12 @@ namespace EfFluentApiCodeFirst.Models.Manager
                 .HasOptional(s => s.StudentAddress) //Student için isteğe bağlı StudentAddress özelliği
                 .WithRequired(sa => sa.Student); //Student oluşturmadan StudentAddress oluşturulamaz olarak atadık.
 
-         
+            //One-to-many
+            modelBuilder.Entity<Lessons>()
+                .HasRequired(l => l.Teacher)
+                .WithMany(t => t.Lessons)
+                .HasForeignKey<int>(t => t.TeacherId);
+
             Database.SetInitializer(new VeritabaniOlusurkenTablolaraBaslangicKayitlariEkleme());
         }
 
@@ -53,7 +62,28 @@ namespace EfFluentApiCodeFirst.Models.Manager
                 context.SaveChanges();
 
 
-              
+
+                List<Lessons> listLessons = new List<Lessons>()
+                {
+                    new Lessons()
+                    {
+                        LessonName = "matematik"
+                    },
+                    new Lessons()
+                    {
+                        LessonName = "fizik"
+                    },
+                };
+                Teacher teacher = new Teacher()
+                {
+                    Name = "aysel",
+                    Surname = "maysel",
+                    Lessons = listLessons
+                };
+
+                context.Teacher.Add(teacher);
+                context.SaveChanges();
+
 
             }
         }
