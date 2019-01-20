@@ -104,6 +104,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Manager\DatabaseContext.cs" />
+    <Compile Include="Models\ManyToMany\Author.cs" />
+    <Compile Include="Models\ManyToMany\AuthorsBooksMapping.cs" />
+    <Compile Include="Models\ManyToMany\Book.cs" />
     <Compile Include="Models\OneToMany\Lessons.cs" />
     <Compile Include="Models\OneToMany\Teacher.cs" />
     <Compile Include="Models\OneToOneOrZero\Student.cs" />
